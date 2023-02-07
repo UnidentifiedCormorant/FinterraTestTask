@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Jobs\DoDonateJob;
 use App\Models\User;
+use Carbon\Carbon;
+use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -45,8 +47,18 @@ class IndexController extends Controller
             return $exeption->getMessage();
         }
 
-        DoDonateJob::dispatch(auth()->id(), $userId, $data)->afterCommit()->delay(now()->addMinutes(2));
+        $origin = date_create(date("Y-m-d"));
+        $target = date_create($request['date']);
+        $interval = date_diff($origin, $target);
+
+        $hours = substr($request['time'], 0, 2);
+        $postponement = $interval->format("%a") * 24 + (int)$hours;  //postponement - отсрочка
+
+        //Версия с прибавкой часов; она легко сломается, если сервер, на котором крутится php artisan queue:work ляжет
+        //DoDonateJob::dispatch(auth()->id(), $userId, $data)->afterCommit()->delay(now()->addHours($postponement));
 
         return redirect(route('users.index'));
+
+        //TODO: Сделать таблицу, в которую будут заноситься платежи, в том числе запланированные; при проведении при проведении платежа в jobs, статус платежа меняется
     }
 }

@@ -16,7 +16,7 @@
                 <input  name="money" type="number" placeholder="Введите сумму перевода">
                 <legend>Дата перевода</legend>
                 <input type="date" name="date">
-                <input type="time" name="time">
+                <input type="time" name="time" step="3600">
             </fieldset>
             <button type="submit">
                 <p class="btn-text">Задонатить</p>
