@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +22,7 @@ class AuthController extends Controller
         {
             Auth::login($user);
             $request->session()->regenerate();
-            return view('index');
+            return redirect(route('users.index'));
         }
         else
         {
