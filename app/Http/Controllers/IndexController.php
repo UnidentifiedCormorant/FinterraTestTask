@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\DoDonateJob;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,25 +18,34 @@ class IndexController extends Controller
 
     public function donate(Request $request, $userId){
 
-        $user = User::find($userId);
+        $data = request()->validate([
+           'money' => '',
+           'date' => '',
+           'time' => '',
+        ]);
 
-        try
-        {
+        try{
             DB::beginTransaction();
 
-            auth()->user()->money -= $request->money;
-            $user->money += $request->money;
+            $sender = auth()->user();
+            $user = User::find($userId);
 
-            auth()->user()->save();
-            $user->save();
+            if($sender->money - $data['money'] < 0){
+                DB::rollBack();
+                return redirect(route('users.index'));
+            }
+
+            $sender->money -= $data['money'];
+            $user->money += $data['money'];
 
             DB::commit();
         }
-        catch (\Exception $exception)
-        {
-            DB::rollback();
-            return $exception->getMessage();
+        catch (\Exception $exeption){
+            DB::rollBack();
+            return $exeption->getMessage();
         }
+
+        DoDonateJob::dispatch(auth()->id(), $userId, $data)->afterCommit()->delay(now()->addMinutes(2));
 
         return redirect(route('users.index'));
     }
