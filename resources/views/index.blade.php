@@ -1,13 +1,15 @@
-<p>Категорически приветствуем вас, {{auth()->user()->name}}
+<p style="font-size: larger">Категорически приветствуем вас, {{auth()->user()->name}}
 <br>
 Ваш балланс {{auth()->user()->money}}</p>
 
 @foreach($users as $user)
 
-    {{$user->name}}<br>
+    <b>{{$user->name}}</b>
+    <br>Балланс {{$user->money}}
+    <br>
 
     <div>
-        <form action="{{route('donate', $user->id)}}" method="post">
+        <form action="{{route('donate', $user->id)}}" method="post" style="max-width: 300px">
             @csrf
             <fieldset>
                 <legend>Сумма перевода</legend>
@@ -22,6 +24,8 @@
             <label for="exampleInputEmail1">@error('email') Неверный пароль @enderror</label>
         </form>
     </div>
+
+    <br>
 
 @endforeach
 
