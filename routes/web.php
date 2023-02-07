@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\AuthController::class, 'authForm'])->name('login');
+Route::get('auth', [\App\Http\Controllers\AuthController::class, 'auth'])->name('auth');
+Route::get('logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+
+Route::get('users', [\App\Http\Controllers\IndexController::class, 'index'])->name('users.index');
+
+Route::post('donate/{userId}', [\App\Http\Controllers\IndexController::class, 'donate'])->name('donate');
