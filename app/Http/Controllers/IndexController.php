@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\DoDonateJob;
+use App\Models\Transfer;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTimeImmutable;
@@ -13,15 +14,17 @@ use Illuminate\Support\Facades\DB;
 class IndexController extends Controller
 {
     public function index(){
-        $users = User::all();
-
+        //TODO: получше потестить
+        $users = User::join('transfers', 'users.id', '=', 'transfers.user_id')->get();
         return view('index', compact('users'));
     }
 
     public function donate(Request $request, $userId){
 
+        //TODO: Проверка доната, с учётом запланированных донатов
+
         $data = request()->validate([
-           'money' => '',
+           'transferredMoney' => '',
            'date' => '',
            'time' => '',
         ]);
@@ -32,13 +35,29 @@ class IndexController extends Controller
             $sender = auth()->user();
             $user = User::find($userId);
 
-            if($sender->money - $data['money'] < 0){
+            if($sender->money - $data['transferredMoney'] < 0){
                 DB::rollBack();
                 return redirect(route('users.index'));
             }
 
-            $sender->money -= $data['money'];
-            $user->money += $data['money'];
+            $sender->money -= $data['transferredMoney'];
+            $user->money += $data['transferredMoney'];
+
+            DB::commit();
+        }
+        catch (\Exception $exeption){
+            DB::rollBack();
+            return $exeption->getMessage();
+        }
+
+        $transfer = null;
+        try{
+            DB::beginTransaction();
+
+            $data['user_id'] = auth()->id();
+            $data['getter_id'] = $userId;
+
+            $transfer = Transfer::Create($data);
 
             DB::commit();
         }
@@ -54,11 +73,9 @@ class IndexController extends Controller
         $hours = substr($request['time'], 0, 2);
         $postponement = $interval->format("%a") * 24 + (int)$hours;  //postponement - отсрочка
 
-        //Версия с прибавкой часов; она легко сломается, если сервер, на котором крутится php artisan queue:work ляжет
         //DoDonateJob::dispatch(auth()->id(), $userId, $data)->afterCommit()->delay(now()->addHours($postponement));
+        DoDonateJob::dispatch(auth()->id(), $userId, $data, $transfer->id)->delay(now()->addMinutes(2));
 
         return redirect(route('users.index'));
-
-        //TODO: Сделать таблицу, в которую будут заноситься платежи, в том числе запланированные; при проведении при проведении платежа в jobs, статус платежа меняется
     }
 }
