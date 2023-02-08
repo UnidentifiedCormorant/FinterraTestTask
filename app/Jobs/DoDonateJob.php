@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Bus\Queueable;
@@ -19,17 +20,19 @@ class DoDonateJob implements ShouldQueue
     private $senderId;
     private $userId;
     private array $data;
+    private $transferId;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($senderId, $userId, $data)
+    public function __construct($senderId, $userId, $data, $transferId)
     {
         $this->senderId = $senderId;
         $this->userId = $userId;
         $this->data = $data;
+        $this->transferId = $transferId;
     }
 
     /**
@@ -41,11 +44,14 @@ class DoDonateJob implements ShouldQueue
     {
         $sender = User::find($this->senderId);
         $user = User::find($this->userId);
+        $transfer = Transfer::find($this->transferId);
 
-        $sender->money -= $this->data['money'];
-        $user->money += $this->data['money'];
+        $sender->money -= $this->data['transferredMoney'];
+        $user->money += $this->data['transferredMoney'];
+        $transfer->status = 1;
 
         $sender->save();
         $user->save();
+        $transfer->save();
     }
 }
