@@ -1,6 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Тестовое задание</title>
+    <link rel="stylesheet" href="{{ URL::asset ('css/style.css') }}">
+</head>
+<body>
+
 <p style="font-size: larger">Категорически приветствуем вас, {{auth()->user()->name}}
     <br>
     Ваш балланс {{auth()->user()->money}}</p>
+
+@error('transferredMoney')
+<p style="color: red">{{$message}}</p>
+@enderror
+
+@error('date')
+<p style="color: red">{{$message}}</p>
+@enderror
+
 
 <div style="display: flex; flex-wrap: wrap">
     @foreach($users as $user)
@@ -15,8 +36,8 @@
                     <legend>Сумма перевода</legend>
                     <input name="transferredMoney" type="number" placeholder="Введите сумму перевода">
                     <legend>Дата перевода</legend>
-                    <input type="date" name="date">
-                    <input type="time" name="time" step="3600">
+                    <input type="date" name="date" value="today">
+                    <input type="time" name="time" step="3600" value="00:00">
                 </fieldset>
                 <button type="submit">
                     <p class="btn-text">Задонатить</p>
@@ -44,3 +65,6 @@
 </div>
 
 <p><a class="links__link" href="{{route('logout')}}">Выйти</a></p>
+
+</body>
+</html>
