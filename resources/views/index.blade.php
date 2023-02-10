@@ -6,7 +6,7 @@
     @foreach($users as $user)
 
         <div style=" margin-right: 40px; ">
-            <form action="{{route('donate', $user->id)}}" method="post" style="max-width: 300px">
+            <form action="{{route('donate', $user->u_id)}}" method="post" style="max-width: 300px">
                 @csrf
                 <b>{{$user->name}}</b>
                 <br>Балланс {{$user->money}}
@@ -24,13 +24,17 @@
                 <label for="exampleInputEmail1">@error('email') Неверный пароль @enderror</label>
             </form>
 
-            <div style="margin-bottom: 60px;">
-                <b>Последний перевод</b> <br>
-                Сумма: {{$user->transferredMoney}} <br>
-                Дата: {{$user->date}} {{$user->time}} <br>
-                Статус: @if($user->status == 1) Выполнен @else Отложен @endif <br>
-                Получатель: {{\App\Models\User::find($user->getter_id)->name}}
-            </div>
+            @if(isset($user->user_id))
+                <div style="margin-bottom: 60px;">
+                    <b>Последний перевод</b> <br>
+                    Сумма: {{$user->transferredMoney}} <br>
+                    Дата: {{$user->date}} {{$user->time}} <br>
+                    Статус: @if($user->status == 1) Выполнен @else Отложен @endif <br>
+                    Получатель: {{\App\Models\User::find($user->getter_id)->name}}
+                </div>
+            @else
+                <div><b>Пользователь пока не осуществлял <br> денежных переводов</b></div>
+            @endif
         </div>
 
 

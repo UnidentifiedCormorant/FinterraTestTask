@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\DB;
 class IndexController extends Controller
 {
     public function index(){
-        //TODO: получше потестить
-        $users = User::join('transfers', 'users.id', '=', 'transfers.user_id')->get();
+        $usersJoin = User::where('users.id', '<>', [auth()->id()])->leftJoin('transfers', 'users.id', '=', 'transfers.user_id')->select('*', 'users.id as u_id')->orderBy('transfers.date', 'desc')->get();
+
+        $users = $usersJoin->unique('user_id');
+
         return view('index', compact('users'));
     }
 
