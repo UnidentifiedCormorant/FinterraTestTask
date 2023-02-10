@@ -10,24 +10,27 @@ use Carbon\Carbon;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Rules\CheckPlannedTransfers;
+use App\Http\Requests\DonateRequest;
 
 class IndexController extends Controller
 {
     public function index(){
-        //TODO: получше потестить
-        $users = User::join('transfers', 'users.id', '=', 'transfers.user_id')->get();
+
+        $usersJoin = User::where('users.id', '<>', auth()->id())
+            ->leftJoin('transfers', 'users.id', '=', 'transfers.user_id')
+            ->select('*', 'users.id as u_id')
+            ->orderBy('transfers.date', 'desc')
+            ->get();
+
+        $users = $usersJoin->unique('u_id');
+
         return view('index', compact('users'));
     }
 
-    public function donate(Request $request, $userId){
+    public function donate(DonateRequest $request, $userId){
 
-        //TODO: Проверка доната, с учётом запланированных донатов
-
-        $data = request()->validate([
-           'transferredMoney' => '',
-           'date' => '',
-           'time' => '',
-        ]);
+        $data = $request->validated();
 
         try{
             DB::beginTransaction();

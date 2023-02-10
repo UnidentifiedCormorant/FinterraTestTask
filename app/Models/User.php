@@ -43,6 +43,6 @@ class User extends Authenticatable
     ];
 
     public function transfers(){
-        return $this->hasMany(Transfer::class);
+        return $this->hasMany(Transfer::class)->get();
     }
 }
