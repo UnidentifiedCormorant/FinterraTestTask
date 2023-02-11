@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\DB;
 use App\Rules\CheckPlannedTransfers;
 use App\Http\Requests\DonateRequest;
 
-class IndexController extends Controller
+class IndexController extends BaseController
 {
-    public function index(){
-
+    public function index()
+    {
         $usersJoin = User::where('users.id', '<>', auth()->id())
             ->leftJoin('transfers', 'users.id', '=', 'transfers.user_id')
             ->select('*', 'users.id as u_id')
@@ -28,56 +28,20 @@ class IndexController extends Controller
         return view('index', compact('users'));
     }
 
-    public function donate(DonateRequest $request, $userId){
-
+    public function donate(DonateRequest $request, $userId)
+    {
         $data = $request->validated();
+        $data['user_id'] = auth()->user()->id;
+        $data['getter_id'] = $userId;
 
-        try{
-            DB::beginTransaction();
+        $this->donatService->storeCheck($data);
+        $this->transferService->store($data);
 
-            $sender = auth()->user();
-            $user = User::find($userId);
+        DoDonateJob::dispatch($data, $this->transferService->transfer->id)
+            ->afterCommit()
+            ->delay(now()->addHours($this->donatService->CountHours($data)));
 
-            if($sender->money - $data['transferredMoney'] < 0){
-                DB::rollBack();
-                return redirect(route('users.index'));
-            }
-
-            $sender->money -= $data['transferredMoney'];
-            $user->money += $data['transferredMoney'];
-
-            DB::commit();
-        }
-        catch (\Exception $exeption){
-            DB::rollBack();
-            return $exeption->getMessage();
-        }
-
-        $transfer = null;
-        try{
-            DB::beginTransaction();
-
-            $data['user_id'] = auth()->id();
-            $data['getter_id'] = $userId;
-
-            $transfer = Transfer::Create($data);
-
-            DB::commit();
-        }
-        catch (\Exception $exeption){
-            DB::rollBack();
-            return $exeption->getMessage();
-        }
-
-        $origin = date_create(date("Y-m-d"));
-        $target = date_create($request['date']);
-        $interval = date_diff($origin, $target);
-
-        $hours = substr($request['time'], 0, 2);
-        $postponement = $interval->format("%a") * 24 + (int)$hours;  //postponement - отсрочка
-
-        //DoDonateJob::dispatch(auth()->id(), $userId, $data)->afterCommit()->delay(now()->addHours($postponement));
-        DoDonateJob::dispatch(auth()->id(), $userId, $data, $transfer->id)->delay(now()->addMinutes(2));
+        //DoDonateJob::dispatch($data, $this->transferService->transfer->id)->delay(now()->addMinutes(2)); //Для быстрого теста
 
         return redirect(route('users.index'));
     }

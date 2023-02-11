@@ -17,8 +17,6 @@ class DoDonateJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $senderId;
-    private $userId;
     private array $data;
     private $transferId;
 
@@ -27,10 +25,8 @@ class DoDonateJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($senderId, $userId, $data, $transferId)
+    public function __construct($data, $transferId)
     {
-        $this->senderId = $senderId;
-        $this->userId = $userId;
         $this->data = $data;
         $this->transferId = $transferId;
     }
@@ -42,16 +38,16 @@ class DoDonateJob implements ShouldQueue
      */
     public function handle()
     {
-        $sender = User::find($this->senderId);
-        $user = User::find($this->userId);
+        $sender = User::find($this->data['user_id']);
+        $getter = User::find($this->data['getter_id']);
         $transfer = Transfer::find($this->transferId);
 
         $sender->money -= $this->data['transferredMoney'];
-        $user->money += $this->data['transferredMoney'];
+        $getter->money += $this->data['transferredMoney'];
         $transfer->status = 1;
 
         $sender->save();
-        $user->save();
+        $getter->save();
         $transfer->save();
     }
 }
