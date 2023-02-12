@@ -34,14 +34,13 @@ class IndexController extends BaseController
         $data['user_id'] = auth()->user()->id;
         $data['getter_id'] = $userId;
 
-        $this->donatService->storeCheck($data);
         $this->transferService->store($data);
 
         DoDonateJob::dispatch($data, $this->transferService->transfer->id)
             ->afterCommit()
             ->delay(now()->addHours($this->donatService->CountHours($data)));
 
-        //DoDonateJob::dispatch($data, $this->transferService->transfer->id)->delay(now()->addMinutes(2)); //Для быстрого теста
+        //DoDonateJob::dispatch($data, $this->transferService->transfer->id)->afterCommit()->delay(now()->addSeconds($this->donatService->CountHours($data))); //Для быстрого теста
 
         return redirect(route('users.index'));
     }

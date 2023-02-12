@@ -17,6 +17,8 @@ class DoDonateJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 25;
+
     private array $data;
     private $transferId;
 
@@ -38,16 +40,25 @@ class DoDonateJob implements ShouldQueue
      */
     public function handle()
     {
-        $sender = User::find($this->data['user_id']);
-        $getter = User::find($this->data['getter_id']);
-        $transfer = Transfer::find($this->transferId);
+        try{
+            DB::beginTransaction();
 
-        $sender->money -= $this->data['transferredMoney'];
-        $getter->money += $this->data['transferredMoney'];
-        $transfer->status = 1;
+            $sender = User::find($this->data['user_id']);
+            $getter = User::find($this->data['getter_id']);
+            $transfer = Transfer::find($this->transferId);
 
-        $sender->save();
-        $getter->save();
-        $transfer->save();
+            $sender->money -= $this->data['transferredMoney'];
+            $getter->money += $this->data['transferredMoney'];
+            $transfer->status = 1;
+
+            $sender->save();
+            $getter->save();
+            $transfer->save();
+
+            DB::commit();
+        }
+        catch (\Exception $exeption){
+            DB::rollBack();
+        }
     }
 }

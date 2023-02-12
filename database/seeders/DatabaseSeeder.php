@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
          Transfer::factory(5)->create();
 
          User::factory()->create([
-             'name' => 'Dungeon master',
-             'email' => 'VanDarkholm@gmail.com',
-             'password' => '6969'
+             'name' => 'Tester',
+             'email' => 'imTester@gmail.com',
+             'password' => '1234'
          ]);
     }
 }
