@@ -1,66 +1,206 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<h1>Инструкция по развёртыванию проекта</h1>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+| <h3>Оглавление</h3> | 
+| ------------- | 
+| [Текст задания](https://github.com/UnidentifiedCormorant/FinterraTestTask/edit/master/README.md#текст-задания) | 
+| [Ссылки](https://github.com/UnidentifiedCormorant/FinterraTestTask/edit/master/README.md#ссылки) | 
+| [ПО, необходимые для запуска приложения](https://github.com/UnidentifiedCormorant/FinterraTestTask/edit/master/README.md#по-необходимое-для-запуска-приложения) | 
+| [Развёртка проекта с использованием Git](https://github.com/UnidentifiedCormorant/FinterraTestTask/edit/master/README.md#развёртка-проекта-с-использованием-git) | 
+| [Развёртка проекта из архива с Google Drive](https://github.com/UnidentifiedCormorant/FinterraTestTask/edit/master/README.md#развёртка-проекта-из-архива-с-google-drive) | 
+| [Несколько комментариев касательно кода и приложения](https://github.com/UnidentifiedCormorant/FinterraTestTask/edit/master/README.md#несколько-комментариев-касательно-кода-и-приложения) | 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<h2>Текст задания</h2>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Задача:**
+Используя любой PHP-фреймворк создать приложение, которое имеет следующие возможности: любой пользователь приложения может выбрать любого другого пользователя приложения (кроме себя), чтобы сделать отложенный перевод денежных средств со своего счета на счет выбранного пользователя. При планировании такого перевода пользователь указывает сумму перевода в рублях, дату и время, когда нужно произвести перевод. Сумма перевода ограничена балансом клиента на момент планирования перевода с учетом ранее запланированных и невыполненных его исходящих переводов. Дата и время выбирается с точностью до часа с использованием календаря. Способ выбора пользователя - любой (можно просто ввод ID). Ввод данных должен валидироваться как на стороне клиента, так и на стороне сервера с выводом ошибок пользователю. 
+Показать на сайте список всех пользователей и информацию об их одном последнем переводе с помощью одного SQL-запроса к БД. 
+Реализовать сам процесс выполнения запланированных переводов. Не допустить ситуации, при которой у какого-либо пользователя окажется отрицательный баланс. 
+Написанный для решения задачи код не должен содержать уязвимостей. Процесс регистрации и проверки прав доступа можно не реализовывать. Для этого допустимо добавить дополнительное поле ввода для указания текущего пользователя. Внешний вид страниц значения не имеет. Решение задачи должно содержать:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Весь текст поставленного тестового задания.
+2. Четкую инструкцию по развертыванию проекта с целью проверки его работоспособности. Приветствуется использование Docker        (не    обязательно).
+3. Миграции и сиды для наполнения БД демонстрационными данными. Решение можно прислать ссылкой на хранилище исходного кода        (GitHub, Bitbucket и др.), либо в виде архива.
 
-## Learning Laravel
+<h2>Ссылки</h2>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+[Проект на GitHub](https://github.com/UnidentifiedCormorant/FinterraTestTask)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+[Архив на Google Drive (на всякий случай)](https://drive.google.com/file/d/1PmOTmP301cIxGcDP0yWMQGpEzykePxsW/view?usp=sharing) 
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+<h2>ПО, необходимое для запуска приложения</h2>
+Для развёртывания проекта у вас должны быть установлены:
 
-## Laravel Sponsors
+* **_Git_**
+* **_PHP 8.0+_**
+* **_Composer_**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+<h2>Развёртка проекта с использованием Git</h2>
 
-### Premium Partners
+1. Откройте консоль, переместитесь в папку, куда будет клонироваться проект. Запустите команду 
+```
+git clone https://github.com/UnidentifiedCormorant/FinterraTestTask
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+   Дождитесь окончания клонирования.
+   
+2.	Откройте проект с помощью редактора кода/IDE. Создайте в корне проекта файл с названием **.env** и поместите в него код, представленный ниже.
+```
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=base64:s8Ex79KEKM4E9IenHScQYrCK9mTb2GllsfLVRWlfyGI=
+APP_DEBUG=true
+APP_URL=http://localhost
 
-## Contributing
+LOG_CHANNEL=stack
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=debug
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=test_task_db
+DB_USERNAME=root
+DB_PASSWORD=
 
-## Code of Conduct
+BROADCAST_DRIVER=log
+CACHE_DRIVER=file
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+MEMCACHED_HOST=127.0.0.1
 
-## Security Vulnerabilities
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+MAIL_MAILER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
 
-## License
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_HOST=
+PUSHER_PORT=443
+PUSHER_SCHEME=https
+PUSHER_APP_CLUSTER=mt1
+
+VITE_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+VITE_PUSHER_HOST="${PUSHER_HOST}"
+VITE_PUSHER_PORT="${PUSHER_PORT}"
+VITE_PUSHER_SCHEME="${PUSHER_SCHEME}"
+VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+```
+В данном коде описана конфигурация для СУБД MySQL. В случае использования другой СУБД, содержание файла .env будет отличаться.
+
+3.	Запустите локальный веб-сервер (OpenServer, WAMP, XAMPP). Откройте PhpMyAdmin и создайте пустую базу данных под названием test_task_db.
+4.	В проекте в терминале примените команду
+```
+composer install 
+```
+для установки необходимых пакетов для работы приложения.
+
+5.	Примените команду 
+```
+php artisan migrate --seed 
+```
+для создания таблиц в базе и её заполнения тестовыми данными.
+
+6.	Примените команду
+```
+php artisan serve
+```
+для запуска проекта и перейдите по ссылке http://127.0.0.1:8000. Вы должны увидеть страницу входа в веб-приложение.
+7.	В приложении реализована простейшая авторизация. Для входа в приложение используйте логин **imTester@gmail.com** и пароль **1234**. Можно так же использовать логин и пароль любого случайным образом сгенерированного пользователя, которые можно скопировать из базы. Пароли не хэшируются.
+8.	Примените команду 
+```
+php artisan queue:work 
+```
+для работы jobs-ов. Приложение готово к использованию.
+
+После выполнения jobs-а, обновите страницу с приложением для вывода обновлённых данных.
+
+<h2>Развёртка проекта из архива с Google Drive</h2>
+
+**Примечание:** в файле .env описана конфигурация для СУБД MySQL. В случае использования другой СУБД, содержание файла **.env** будет отличаться.
+3.	Запустите локальный веб-сервер (OpenServer, WAMP, XAMPP). Откройте PhpMyAdmin и создайте пустую базу данных под названием test_task_db.
+4.	В проекте в терминале примените команду
+```
+composer install 
+```
+для установки необходимых пакетов для работы приложения.
+
+5.	Примените команду 
+```
+php artisan migrate --seed 
+```
+для создания таблиц в базе и её заполнения тестовыми данными.
+
+6.	Примените команду
+```
+php artisan serve
+```
+для запуска проекта и перейдите по ссылке http://127.0.0.1:8000. Вы должны увидеть страницу входа в веб-приложение.
+7.	В приложении реализована простейшая авторизация. Для входа в приложение используйте логин **imTester@gmail.com** и пароль **1234**. Можно так же использовать логин и пароль любого случайным образом сгенерированного пользователя, которые можно скопировать из базы. Пароли не хэшируются.
+8.	Примените команду 
+```
+php artisan queue:work 
+```
+для работы jobs-ов. Приложение готово к использованию.
+
+После выполнения jobs-а, обновите страницу с приложением для вывода обновлённых данных.
+
+<h2>Несколько комментариев касательно кода и приложения</h2>
+
+В приложении реализована «ленивая» авторизация, без регистрации, смены пароля и т.д. Сделано это для того, чтобы безболезненно пользоваться фасадом `auth()`.
+Касательно queue и jobs – они работают как часы. Для меня было настоящим открытием, что задания в таблице jobs выполнятся, даже если демон не активен. Моей первичный теорией было то, что если мы вызываем для jobs-а метод `delay()`, то демон считает секунды только когда активен. После нескольких простых тестов (запуск демона после истечения времени отсрочки, до истечения времени отсрочки и т.д.), стало понятно, что jobs-ы всегда выполняются в заданное время при активном демоне, а если демон запущен после истечения срока – выполняются тут же. Всё благодаря тому, что в таблицу заносится юниксовое время из метода PHP `time()`. Благодаря этому jobs-ы отработают когда надо, лишь бы был активен демон php artisan queue:work.
+В коде предусмотрена строка для быстрой проверки работы jobs-ов.
+
+>Время отсрочки в часах
+```PHP
+ DoDonateJob::dispatch($data, $this->transferService->transfer->id)
+            ->afterCommit()
+            ->delay(now()->addHours($this->donatService->CountHours($data)));
+
+        //DoDonateJob::dispatch($data, $this->transferService->transfer->id)->afterCommit()->delay(now()->addSeconds($this->donatService->CountHours($data))); //Для быстрого теста
+```
+
+>Время отсрочки в минутах
+```PHP
+// DoDonateJob::dispatch($data, $this->transferService->transfer->id)
+//            ->afterCommit()
+//            ->delay(now()->addHours($this->donatService->CountHours($data)));
+
+        DoDonateJob::dispatch($data, $this->transferService->transfer->id)->afterCommit()->delay(now()->addSeconds($this->donatService->CountHours($data))); //Для быстрого теста
+```
+
+Пару слов насчёт требования *«Показать на сайте список всех пользователей и информацию об их одном последнем переводе с помощью одного SQL-запроса к БД»* - оно выполнено не совсем честно, так как после запроса идёт обработка коллекции с результатами запроса. В идеале, её быть не должно и запрос должен отправлять нам уже готовые данные.
+
+```php
+public function index()
+    {
+        $usersJoin = User::where('users.id', '<>', auth()->id())
+            ->leftJoin('transfers', 'users.id', '=', 'transfers.user_id')
+            ->select('*', 'users.id as u_id')
+            ->orderBy('transfers.date', 'desc')
+            ->get();
+
+        $users = $usersJoin->unique('u_id');
+
+        return view('index', compact('users'));
+    }
+```
