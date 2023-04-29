@@ -1,26 +1,3 @@
-<h1>UPD</h1>
-
-Буквально сегодня `(14.02.2023)` ознакомился с ServiceContainer и ServiceProvider и переписал код метода `donate()` на более лаконичный, без прослойки в виде BaseController-а
-
-```PHP
-public function donate(DonateRequest $request, $userId, DonateService $donateService, TransferService $transferService)
-    {
-        $data = $request->validated();
-        $data['user_id'] = auth()->user()->id;
-        $data['getter_id'] = $userId;
-
-        $transferService->store($data);
-
-        DoDonateJob::dispatch($data, $transferService->transfer->id)
-            ->afterCommit()
-            ->delay(now()->addHours($donateService->CountHours($data)));
-
-        //DoDonateJob::dispatch($data, $this->transferService->transfer->id)->afterCommit()->delay(now()->addSeconds($this->donatService->CountHours($data))); //Для быстрого теста
-
-        return redirect(route('users.index'));
-    }
-```
-Эта "красота" лежит на отдельной ветке под названием `serviceProviderTry`, лить в `master` не стал, чтобы не возникло казусов, на случай если код уже видели.
 
 <h1>Инструкция по развёртыванию проекта</h1>
 
